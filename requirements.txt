@@ -1,0 +1,13 @@
+# Speech-related
+vosk==0.3.45
+pyttsx3==2.90
+PyAudio>=0.2.11
+
+# Machine Learning
+transformers==4.36.2
+torch
+
+# Utilities
+numpy==1.26.3
+vosk==0.3.45
+# Speech-related

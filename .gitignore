@@ -1,0 +1,8 @@
+# .gitignore
+__pycache__/
+*.pyc
+*.wav
+venv/
+.pytest_cache/
+*.log
+models/
