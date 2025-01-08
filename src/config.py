@@ -8,10 +8,13 @@ class Config:
     sample_rate: int = 16000
     chunk_size: int = 1024
     channels: int = 1
+    noise_threshold: float = 0.1
     
     @classmethod
     def load(cls, path: Path) -> "Config":
-        """Load config from JSON file."""
         with open(path) as f:
-            data = json.load(f)
-        return cls(**data)
+            return cls(**json.load(f))
+            
+    def save(self, path: Path) -> None:
+        with open(path, 'w') as f:
+            json.dump(self.__dict__, f, indent=2)

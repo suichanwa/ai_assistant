@@ -149,6 +149,26 @@ logging.basicConfig(
     ]
 )
 
+def preprocess_audio(self, audio_data: bytes) -> bytes:
+    """Apply audio preprocessing.
+    
+    Args:
+        audio_data (bytes): Raw audio data
+    Returns:
+        bytes: Processed audio data
+    """
+    # Convert to numpy array
+    audio = np.frombuffer(audio_data, dtype=np.int16)
+    
+    # Normalize
+    normalized = audio / np.max(np.abs(audio))
+    
+    # Noise reduction
+    noise_threshold = 0.1
+    normalized[np.abs(normalized) < noise_threshold] = 0
+    
+    return (normalized * 32767).astype(np.int16).tobytes()
+
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":

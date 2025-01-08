@@ -3,36 +3,38 @@ import logging
 from typing import Optional
 
 class TextToSpeech:
-    def __init__(self, voice: Optional[str] = None, rate: int = 150):
+    def __init__(self, voice_id: Optional[str] = None, rate: int = 175):
         """Initialize TTS engine.
         
         Args:
-            voice (str, optional): Voice ID to use. None for default voice.
-            rate (int): Speech rate (words per minute). Defaults to 150.
+            voice_id (str): Voice ID to use (None for default)
+            rate (int): Speech rate (default: 175)
         """
         try:
             self.engine = pyttsx3.init()
+            
+            # List available voices
+            voices = self.engine.getProperty('voices')
+            logging.info(f"Available voices: {len(voices)}")
+            for voice in voices:
+                logging.info(f"Voice ID: {voice.id}")
+            
+            # Set voice if specified
+            if voice_id:
+                self.engine.setProperty('voice', voice_id)
+                
+            # Set speech rate
             self.engine.setProperty('rate', rate)
             
-            if voice:
-                self.engine.setProperty('voice', voice)
-                
-            # Get available voices
-            voices = self.engine.getProperty('voices')
-            if voices:
-                logging.info(f"Available voices: {len(voices)}")
-                for v in voices:
-                    logging.info(f"Voice ID: {v.id}")
-                    
         except Exception as e:
-            logging.error(f"Error initializing TTS engine: {e}")
+            logging.error(f"Error initializing TTS: {e}")
             raise
 
     def speak(self, text: str) -> None:
         """Convert text to speech and play it.
         
         Args:
-            text (str): Text to convert to speech
+            text (str): Text to speak
         """
         try:
             self.engine.say(text)
@@ -40,34 +42,26 @@ class TextToSpeech:
         except Exception as e:
             logging.error(f"Error speaking text: {e}")
 
-    def save_to_file(self, text: str, filename: str) -> None:
-        """Save speech to an audio file.
-        
-        Args:
-            text (str): Text to convert to speech
-            filename (str): Output audio filename
-        """
-        try:
-            self.engine.save_to_file(text, filename)
-            self.engine.runAndWait()
-        except Exception as e:
-            logging.error(f"Error saving speech to file: {e}")
-
     def __del__(self):
-        """Clean up TTS engine resources."""
+        """Cleanup resources."""
         try:
             self.engine.stop()
         except:
             pass
 
 if __name__ == "__main__":
-    # Test TTS
-    tts = TextToSpeech()
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
     
+    # Test different voices
+    tts = TextToSpeech()
     test_texts = [
-        "Hello! Testing text to speech.",
-        "This is another test message.",
-        "Goodbye!"
+        "Hello! This is a test of the text-to-speech system.",
+        "The quick brown fox jumps over the lazy dog.",
+        "How does this voice sound?"
     ]
     
     for text in test_texts:
