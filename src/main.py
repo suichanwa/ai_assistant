@@ -3,10 +3,10 @@ import logging
 from pathlib import Path
 from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 from rich.console import Console
-from .mic import MicrophoneHandler 
-from .stt import SpeechToText
-from .nlp import NLPHandler
-from .tts import TextToSpeech
+from src.mic import MicrophoneHandler 
+from src.stt import SpeechToText
+from src.nlp import NLPHandler
+from src.tts import TextToSpeech
 
 def create_cli():
     """Create command line interface parser."""
